@@ -10,13 +10,9 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 
-/**
- * @author Ramesh Fadatare
- *
- */
+
 @Configuration
-public class WebConfig implements WebMvcConfigurer
-{
+public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private MessageSource messageSource;
