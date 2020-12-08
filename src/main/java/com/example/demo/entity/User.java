@@ -27,17 +27,25 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class User {
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
+
     @Column(nullable=false)
     @NotEmpty()
     private String name;
+
     @Column(nullable=false, unique=true)
     @NotEmpty
     @Email(message="{errors.invalid_email}")
     private String email;
+
     @Column(nullable=false)
     @NotEmpty
     @Size(min=4)
     private String password;
+
+    @Column(nullable = false)
+    @javax.validation.constraints.NotEmpty
+    private Long phone;
+
 
     @ManyToMany(cascade=CascadeType.MERGE)
     @JoinTable(
@@ -85,5 +93,13 @@ public class User {
     public void setRoles(List<Role> roles)
     {
         this.roles = roles;
+    }
+
+    public Long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Long phone) {
+        this.phone = phone;
     }
 }
