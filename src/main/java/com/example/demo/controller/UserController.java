@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 
 import com.example.demo.entity.User;
-import com.example.demo.user.UserService;
+import com.example.demo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
