@@ -1,68 +1,82 @@
 package com.example.demo.entity;
 
-import java.util.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.util.Collection;
+import java.util.Collections;
 
-@Entity
-@Table(name = "users")
-public class User {
 
-    @Id
-    @Column(name = "user_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Getter
+@Setter
+@Builder
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity(name = "Users")
+public class User implements UserDetails {
 
-    private String username;
-    private String password;
-    private boolean enabled;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Role> roles = new HashSet<>();
+	private String name;
 
-    public Long getId() {
-        return id;
-    }
+	private String surname;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private String email;
 
-    public String getUsername() {
-        return username;
-    }
+	private String password;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	@Builder.Default
+	private UserRole userRole = UserRole.USER;
 
-    public String getPassword() {
-        return password;
-    }
+	@Builder.Default
+	private Boolean locked = false;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	@Builder.Default
+	private Boolean enabled = false;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+		final SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(userRole.name());
+		return Collections.singletonList(simpleGrantedAuthority);
+	}
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
+	@Override
+	public String getPassword() {
+		return password;
+	}
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+	@Override
+	public String getUsername() {
+		return email;
+	}
 
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return !locked;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return enabled;
+	}
 }
